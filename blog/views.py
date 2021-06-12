@@ -1,6 +1,9 @@
 from django.shortcuts import render
-from .models import Chapter
+from .models import Chapter,Arc
 from django.views.generic import ListView , DetailView
+
+from django.db.models import Count
+
 
 # Create your views here.
 
@@ -15,13 +18,6 @@ class ChapterList(ListView):
         return context
 
 
-# views increment
-def update_views_count(chapter_id):
-    views_count = int(Chapter.objects.get(id=chapter_id).views)
-    new_views_count = views_count + 1
-    chapter = Chapter(id=chapter_id)
-    chapter.views = new_views_count
-    chapter.save()
 
 class ChapterDetail(DetailView):
     model = Chapter
@@ -35,17 +31,6 @@ class ChapterDetail(DetailView):
 
 
 
-        # context['categories'] = Category.objects.all().annotate(post_count=Count('post_category'))
-        # context['recent_posts'] = Post.objects.all()[:3]
+        context['arcs'] = Arc.objects.all().annotate(chapter_count=Count('chapter_arc'))
+        context['recent_arcs'] = Arc.objects.all()[:3]
         return context
-
-
-
-# def all_chapters(request):
-#     chapters = Chapter.objects.filter(active=True)
-#     context = {'chapters': chapters}
-#     return render(request, 'blog/all_chapters.html', context)
-
-#
-# def chapter_detail(request, id):
-#     pass

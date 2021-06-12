@@ -8,5 +8,5 @@ app_name = 'blog'
 
 urlpatterns = [
     path('', ChapterList.as_view(), name='chapters'),
-    path('<int:pk>', ChapterDetail.as_view(), name='chapter_detail'),
+    path('<str:slug>', ChapterDetail.as_view(), name='chapter_detail'),
 ]

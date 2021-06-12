@@ -10,11 +10,11 @@
       {% for chapter in chapter_list %}
       <div class="col-md-3 d-flex ftco-animate">
         <div class="blog-entry align-self-stretch">
-          <a href="blog-single.html" class="block-20" style="background-image: url('{{chapter.image.url}}');">
+          <a href="{% url 'blog:chapter_detail' chapter.slug %}" class="block-20" style="background-image: url('{{chapter.image.url}}');">
           </a>
           <div class="text p-4 d-block">
             <span class="tag">{{chapter.arc}}</span>
-            <h3 class="heading mt-3"><a href="{{chapter.get_absolute_url}}">{{chapter.title}}</a></h3>
+            <h3 class="heading mt-3"><a href="{% url 'blog:chapter_detail' chapter.slug %}">{{chapter.title}}</a></h3>
             <div class="meta mb-3">
               <div><a href="#">{{chapter.published_at|date:"d M Y"}}</a></div>
               <div><a href="#">{{chapter.author}}</a></div>

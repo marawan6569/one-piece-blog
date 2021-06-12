@@ -14,3 +14,13 @@
       - name --> text
       - number --> number
       - image --> file
+
+
+### [author]
+      - user --> relation
+      - name --> CharField
+      - description --> CharField
+      - image --> file
+      - Facebook --> URL
+      - Instagram --> URL
+      - Twitter --> URL

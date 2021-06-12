@@ -10,6 +10,10 @@
 
 
       <div class="col-md-8 ftco-animate">
+        <h2 class="float-right">{{chapter}}</h2>
+        <div class="float-left text-right">
+          {{chapter.chapter|safe}}
+        </div>
 
 
         <div class="about-author d-flex p-5 bg-light">
@@ -30,28 +34,17 @@
 
       </div> <!-- .col-md-8 -->
       <div class="col-md-4 sidebar ftco-animate">
-        <div class="sidebar-box">
-          <form action="#" class="search-form">
-            <div class="form-group">
-              <span class="icon fa fa-search"></span>
-              <input type="text" class="form-control" placeholder="Type a keyword and hit enter">
-            </div>
-          </form>
-        </div>
         <div class="sidebar-box ftco-animate">
           <div class="categories">
-            <h3>Categories</h3>
-            <li><a href="#">Tour <span>(12)</span></a></li>
-            <li><a href="#">Hotel <span>(22)</span></a></li>
-            <li><a href="#">Coffee <span>(37)</span></a></li>
-            <li><a href="#">Drinks <span>(42)</span></a></li>
-            <li><a href="#">Foods <span>(14)</span></a></li>
-            <li><a href="#">Travel <span>(140)</span></a></li>
+            <h3>Arcs</h3>
+              {% for arc in arcs %}
+                <li><a href="#">{{arc}}<span>({{arc.chapter_count}})</span></a></li>
+              {% endfor %}
           </div>
         </div>
 
         <div class="sidebar-box ftco-animate">
-          <h3>Recent Blog</h3>
+          <h3>Recent arcs</h3>
           <div class="block-21 mb-4 d-flex">
             <a class="blog-img mr-4" style="background-image: url(images/image_1.jpg);"></a>
             <div class="text">
