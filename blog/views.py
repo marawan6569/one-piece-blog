@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Chapter,Arc
+from .models import Chapter,Arc,Author
 from django.views.generic import ListView , DetailView
 
 from django.db.models import Count
@@ -26,11 +26,14 @@ class ChapterDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+
         self.object.add_view()
         self.object.save()
 
+        author = Author.objects.get(user=context['chapter'].author)
 
 
         context['arcs'] = Arc.objects.all().annotate(chapter_count=Count('chapter_arc'))
-        context['recent_arcs'] = Arc.objects.all()[:3]
+        context['recent_chapters'] = Chapter.objects.all()[:3]
+        context['author'] = author
         return context
