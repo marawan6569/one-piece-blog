@@ -1,6 +1,11 @@
-from django.shortcuts import render
-from .models import Chapter,Arc,Author
+from django.shortcuts import render,redirect
+from django.http import JsonResponse
+from .models import Chapter,Arc,Author,Comment
 from django.views.generic import ListView , DetailView
+# from django.views.generic.edit import FormMixin
+from django.urls import reverse
+
+# from .forms import CommentForm
 
 from django.db.models import Count
 
@@ -21,8 +26,6 @@ class ChapterList(ListView):
 
 class ChapterDetail(DetailView):
     model = Chapter
-
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -36,4 +39,28 @@ class ChapterDetail(DetailView):
         context['arcs'] = Arc.objects.all().annotate(chapter_count=Count('chapter_arc'))
         context['recent_chapters'] = Chapter.objects.all()[:3]
         context['author'] = author
+        context['comments'] = Comment.objects.filter(chapter=self.get_object()).annotate(replies='replies')
+        context['replies'] = Comment.objects.filter(chapter=self.get_object(), replaying_to = not None)
         return context
+
+
+        return redirect(reverse('blog:chapter_detail' , kwargs={'slug':self.get_object().slug}))
+
+
+
+
+def add_comment(request):
+    print('==========================================================================yes')
+    print(request.GET.get('chapter_id'))
+    if request.is_ajax and request.method == 'GET':
+        print('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++yes')
+        comment = Comment.objects.create(
+            chapter = Chapter.objects.get(id = int(request.GET.get('chapter_id'))),
+            name = request.GET.get('name'),
+            email = request.GET.get('email'),
+            body = request.GET.get('comment')
+
+        )
+        comment.save()
+        return JsonResponse({'text':'test'},status=200)
+    return JsonResponse({'text':'test'},status=400)
