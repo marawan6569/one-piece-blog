@@ -29,22 +29,25 @@ $('#post_comment').click(function(e) {
     name = $('#name').val(),
     email = $('#email').val(),
     comment = $('#comment').val();
-    testEmail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
-    if (testEmail.test(email)){
-      email = email
-      if (chapter_id != '' && name != '' && email != '' && comment != '') {
-        data = {'chapter_id': chapter_id, 'name': name, 'email': email, 'comment': comment}
-        console.log(data);
-        add_comment(data)
+  testEmail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+  if (testEmail.test(email)) {
+    email = email
+    if (chapter_id != '' && name != '' && email != '' && comment != '') {
+      data = {
+        'chapter_id': chapter_id,
+        'name': name,
+        'email': email,
+        'comment': comment
       }
-      else {
-        alert('please fill all fields')
-      }
+      // console.log(data);
+      add_comment(data)
+    } else {
+      alert('please fill all fields')
     }
-    else{
-      email = ''
-      alert('pleas enter a vailed email')
-    }
+  } else {
+    email = ''
+    alert('pleas enter a vailed email')
+  }
 
 
 });
@@ -54,15 +57,24 @@ $('#post_comment').click(function(e) {
 
 function add_comment(data) {
   $.ajax({
-    type: 'GET',
+    type: 'POST',
     url: '/ajax/add-comment',
     data: data,
     success: function(response) {
-      console.log(response);
+      // $('#name').val() = '';
+      // $('#email').val() = '';
+      // $('#comment').val() = '';
+      console.log(response['instance']);
+
     },
-    // error: function (response) {
-    //   console.log(error);
-    // }
+    error: function(response) {
+      console.log('error');
+      $('#comment_form')[0].reset();
+      var instance = JSON.parse(response["instance"]);
+      console.log(instance);
+
+
+    }
   })
 }
 

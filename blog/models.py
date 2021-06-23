@@ -67,7 +67,7 @@ class Author(models.Model):
 
 class Comment(models.Model):
     chapter = models.ForeignKey(Chapter,on_delete=models.CASCADE,related_name='comments')
-    replies = models.ManyToManyField('self', related_name='replies')
+    parent = models.ForeignKey('self', related_name='replies', on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=80)
     email = models.EmailField()
     body = models.TextField()

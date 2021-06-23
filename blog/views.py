@@ -39,8 +39,8 @@ class ChapterDetail(DetailView):
         context['arcs'] = Arc.objects.all().annotate(chapter_count=Count('chapter_arc'))
         context['recent_chapters'] = Chapter.objects.all()[:3]
         context['author'] = author
-        context['comments'] = Comment.objects.filter(chapter=self.get_object()).annotate(replies='replies')
-        context['replies'] = Comment.objects.filter(chapter=self.get_object(), replaying_to = not None)
+        context['comments'] = Comment.objects.filter(chapter=self.get_object())
+        # context['replies'] = Comment.objects.filter(chapter=self.get_object(), replaying_to = not None)
         return context
 
 
@@ -52,7 +52,7 @@ class ChapterDetail(DetailView):
 def add_comment(request):
     print('==========================================================================yes')
     print(request.GET.get('chapter_id'))
-    if request.is_ajax and request.method == 'GET':
+    if request.is_ajax and request.method == 'POST':
         print('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++yes')
         comment = Comment.objects.create(
             chapter = Chapter.objects.get(id = int(request.GET.get('chapter_id'))),
@@ -62,5 +62,5 @@ def add_comment(request):
 
         )
         comment.save()
-        return JsonResponse({'text':'test'},status=200)
-    return JsonResponse({'text':'test'},status=400)
+        return JsonResponse({'comment': comment}, status=200)
+    return JsonResponse({'comment': comment}, status=200)

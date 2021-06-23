@@ -38,68 +38,44 @@
 
           {% if comments == 1 %}
           <h3 class="mb-5">1 Comment</h3>
+          {% elif comments == 0 %}
+            <h3 class="mb-5"> 0 Comments</h3>
           {% else %}
-          <h3 class="mb-5">{{comments.count}} + {{replies.count}} Comments</h3>
+          <h3 class="mb-5">{{comments.count}} Comments</h3>
           {% endif %}
 
-
-        <ul class="comment-list">
-          {% for comment in comments %}
-            {% if comment.replaying_to == Null %}
-              <li class="comment">
-                <div class="vcard bio">
-                  <img src="{% static 'images/person_1.jpg' %}" alt="Image placeholder">
-                </div>
-                <div class="comment-body">
-                  <h3>{{comment.name}}</h3>
-                  <div class="meta">{{comment.created_on}}</div>
-                  <p>{{comment.body}}</p>
-                  <p><a href="#" class="reply">Reply</a></p>
-                </div>
-                  {% for reply in replies %}
-                  {% if reply.id in comment.replaying_to.all %}
-                    <ul class="children">
-                      <li class="comment">
-                        <div class="vcard bio">
-                          <img src="{% static 'images/person_1.jpg' %}" alt="Image placeholder">
-                        </div>
-                        <div class="comment-body">
-                          <h3>{{reply.name}}</h3>
-                          <div class="meta">{{reply.created_on}}</div>
-                          <p>r{{eply.body}}</p>
-                          <p><a href="#" class="reply">Reply</a></p>
-                        </div>
-                    </ul>
-                  {% endif %}
-                  {% endfor %}
-              </li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-
-<!--
-        <ul class="comment-list">
-          {% for comment in comments %}
-            {% if comment.replaying_to != Null %}
-            {% else %}
-              {% if comment.replaying_to.count == 0 %}
-              {% else %}
+          <ul class="comment-list">
+          {% for comment in chapter.comments.all %}
+            {% if comment.parent == none %}
+            <li class="comment">
+              <div class="vcard bio">
+                <img src="{% static 'images/person_1.jpg' %}" alt="Image placeholder">
+              </div>
+              <div class="comment-body">
+                <h3>{{comment.name}}</h3>
+                <div class="meta">{{comment.created_on}}</div>
+                <p>{{comment.body|linebreaks}}</p>
+                <p><a href="#" id="{{comment.id}}" class="reply">Reply</a></p>
+              </div>
+              {% for reply in comment.replies.all %}
+              <ul class="children">
                 <li class="comment">
                   <div class="vcard bio">
                     <img src="{% static 'images/person_1.jpg' %}" alt="Image placeholder">
                   </div>
                   <div class="comment-body">
-                    <h3>{{comment.name}}</h3>
-                    <div class="meta">{{comment.created_on}}</div>
-                    <p>{{comment.body}}</p>
-                    <p><a href="#" class="reply">Reply</a></p>
+                    <h3>{{reply.name}}</h3>
+                    <div class="meta">{{reply.created_on}}</div>
+                    <p>{{reply.body|linebreaks}}</p>
+                    <p><a href="#" id="{{reply.id}}" class="reply">Reply</a></p>
                   </div>
-                </li>
-
-              {% endif %}
+              </ul>
+              {% endfor %}
+            </li>
             {% endif %}
           {% endfor %}
-        </ul> -->
+          </ul>
+
 
 
 
