@@ -44,7 +44,7 @@
           <h3 class="mb-5">{{comments.count}} Comments</h3>
           {% endif %}
 
-          <ul class="comment-list">
+          <ul class="comment-list" id="comment-container">
           {% for comment in chapter.comments.all %}
             {% if comment.parent == none %}
             <li class="comment">

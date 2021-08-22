@@ -57,22 +57,36 @@ $('#post_comment').click(function(e) {
 
 function add_comment(data) {
   $.ajax({
-    type: 'POST',
+    type: 'GET',
     url: '/ajax/add-comment',
     data: data,
     success: function(response) {
       // $('#name').val() = '';
       // $('#email').val() = '';
       // $('#comment').val() = '';
-      console.log(response['instance']);
+      comment = response['comment']
+      comments_list = $('#comment-container')
+      comments_list.append(
+        " <li class='comment'>\
+          <div class='vcard bio'>\
+            <img src='/static/images/person_1.jpg' alt='Image placeholder'>\
+          </div>\
+          <div class='comment-body'>\
+            <h3>" + comment['name'] + "</h3>\
+            <div class='meta'>" + comment['created_on'] + "</div>\
+            <p>" + comment['body'] + "</p>\
+            <p><a href='#' id='" + comment['id'] + "' class='reply'>Reply</a></p>\
+          </div>\
+        </li>\
+        "
+      )
+      console.log(response['comment']);
 
     },
     error: function(response) {
       console.log('error');
       $('#comment_form')[0].reset();
-      var instance = JSON.parse(response["instance"]);
-      console.log(instance);
-
+      alert('cant add comment now, please try agin later')
 
     }
   })
