@@ -5,6 +5,9 @@ from django.views.generic import ListView , DetailView
 # from django.views.generic.edit import FormMixin
 from django.urls import reverse
 
+
+from django.core import serializers
+
 # from .forms import CommentForm
 
 from django.db.models import Count
@@ -52,7 +55,7 @@ class ChapterDetail(DetailView):
 def add_comment(request):
     print('==========================================================================yes')
     print(request.GET.get('chapter_id'))
-    if request.is_ajax and request.method == 'POST':
+    if request.is_ajax and request.method == 'GET':
         print('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++yes')
         comment = Comment.objects.create(
             chapter = Chapter.objects.get(id = int(request.GET.get('chapter_id'))),
@@ -62,5 +65,6 @@ def add_comment(request):
 
         )
         comment.save()
-        return JsonResponse({'comment': comment}, status=200)
-    return JsonResponse({'comment': comment}, status=200)
+        com = {'id': comment.id, 'name': comment.name, 'body': comment.body, 'created_on': comment.created_on}
+        return JsonResponse({'comment': com}, status=200)
+    return JsonResponse({'error': error}, status=500)
