@@ -6,8 +6,6 @@ from django.views.generic import ListView , DetailView
 from django.urls import reverse
 
 
-from django.core import serializers
-
 # from .forms import CommentForm
 
 from django.db.models import Count
@@ -53,12 +51,29 @@ class ChapterDetail(DetailView):
 
 
 def add_comment(request):
-    print('==========================================================================yes')
-    print(request.GET.get('chapter_id'))
     if request.is_ajax and request.method == 'GET':
-        print('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++yes')
         comment = Comment.objects.create(
             chapter = Chapter.objects.get(id = int(request.GET.get('chapter_id'))),
+            name = request.GET.get('name'),
+            email = request.GET.get('email'),
+            body = request.GET.get('comment')
+
+        )
+        comment.save()
+        com = {'id': comment.id, 'name': comment.name, 'body': comment.body, 'created_on': comment.created_on}
+        return JsonResponse({'comment': com}, status=200)
+    return JsonResponse({'error': error}, status=500)
+
+
+def add_reply(request):
+    if request.is_ajax and request.method == 'GET':
+        print('----------------------------------------------------------------------------')
+        print(request.GET.get('comment_id'))
+        print(Comment.objects.get(id = int(request.GET.get('comment_id'))).id)
+        print('----------------------------------------------------------------------------')
+        comment = Comment.objects.create(
+            chapter = Chapter.objects.get(id = int(request.GET.get('chapter_id'))),
+            parent = Comment.objects.get(id = int(request.GET.get('comment_id'))),
             name = request.GET.get('name'),
             email = request.GET.get('email'),
             body = request.GET.get('comment')

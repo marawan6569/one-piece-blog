@@ -55,10 +55,11 @@
                 <h3>{{comment.name}}</h3>
                 <div class="meta">{{comment.created_on}}</div>
                 <p>{{comment.body|linebreaks}}</p>
-                <p><a href="#" id="{{comment.id}}" class="reply">Reply</a></p>
+                <p><a href="javascript:show_replying_form({{comment.id}})" id="comment-{{comment.id}}" comment-id="{{comment.id}}" class="reply">Reply</a></p>
               </div>
-              {% for reply in comment.replies.all %}
+
               <ul class="children">
+                {% for reply in comment.replies.all %}
                 <li class="comment">
                   <div class="vcard bio">
                     <img src="{% static 'images/person_1.jpg' %}" alt="Image placeholder">
@@ -67,10 +68,10 @@
                     <h3>{{reply.name}}</h3>
                     <div class="meta">{{reply.created_on}}</div>
                     <p>{{reply.body|linebreaks}}</p>
-                    <p><a href="#" id="{{reply.id}}" class="reply">Reply</a></p>
                   </div>
+                  {% endfor %}
               </ul>
-              {% endfor %}
+
             </li>
             {% endif %}
           {% endfor %}
